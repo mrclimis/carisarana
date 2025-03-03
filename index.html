@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencarian Aset</title>
+  <style>
+    body {
+	  font-family: Arial, sans-serif;
+	  margin: 0;
+	  padding: 0;
+	  width: 100%;
+	  height: 100%;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  background-color: #f0f0f0;
+	}
+
+	.container {
+	  max-width: 100%; /* Ubah dari 500px ke 100% */
+	  width: 90%; /* Gunakan persentase untuk responsivitas */
+	  margin: auto;
+	  padding: 20px;
+	  box-sizing: border-box;
+	  background-color: white;
+	  border-radius: 8px;
+	  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	input, button {
+	  padding: 10px;
+	  margin: 10px 0;
+	  width: 100%;
+	  box-sizing: border-box;
+	}
+
+	img {
+	  max-width: 100%;
+	  height: auto;
+	  margin-top: 20px;
+	}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <center><h3>CARI ASET SARANA</h3></center>
+    <input type="text" id="nomor_aset" placeholder="Masukkan Nomor Aset">
+    <button onclick="cariAset()">Cari Aset</button>
+    <button onclick="scanQRCode()">Scan QR Code</button>
+
+    <div id="hasil">
+      <!-- Hasil pencarian akan ditampilkan di sini -->
+    </div>
+  </div>
+
+  <script>
+    async function cariAset() {
+      const nomorAset = document.getElementById("nomor_aset").value;
+      if (!nomorAset) {
+        alert("Masukkan nomor aset!");
+        return;
+      }
+
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbzFOwNICRrqv9_r937DQ593U0lfk9-djer4XvpngDw3qo248QBzVPD90ofT59mT7wmZ/exec?nomor_aset=${nomorAset}`);
+      const data = await response.json();
+
+      const hasilDiv = document.getElementById("hasil");
+      hasilDiv.innerHTML = "";
+
+      if (data.status === "found") {
+        hasilDiv.innerHTML = `
+		<p>
+          <table width="100%" border="1">
+		  <tr align="center">
+			<td colspan="2" bgcolor="#42f5ad">PROFIL SARANA</td>
+		  </tr>
+		  <tr>
+			<td width="25%">Nomor Aset</td>
+			<td>: ${data.nomor_aset}</td>
+		  </tr>
+		  <tr>
+			<td>Nama Sarana</td>
+			<td>: ${data.nama_aset}</td>
+			
+		  </tr>
+		  <tr>
+			<td>Anggaran</td>
+			<td>: .......</td>
+		  </tr>
+		  <tr>
+			<td>Tahun</td>
+			<td>: ........</td>
+		  </tr>
+		  <tr>
+			<td>Lokasi</td>
+			<td>: ${data.ruang_aset}</td>
+		  </tr>
+		  <tr>
+			<td>Pengguna</td>
+			<td>: ${data.pengguna_aset}</td>
+		  </tr>
+		  <tr>
+			<td colspan="2">Spesifikasi:<br> ............ </td>
+		  </tr>
+		  </table>
+		
+		  Foto:<br>
+          <!-- <img src="${data.foto_aset}" alt="${data.nama_aset}"> -->
+		  <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=" + data.foto_aset alt="Contoh Gambar">
+		  <br>
+		  ${data.foto_aset}
+		</p>
+        `;
+      } else {
+        hasilDiv.innerHTML = "<p>Data tidak ditemukan.</p>";
+      }
+    }
+
+    function scanQRCode() {
+      const qrScanner = new QRScanner();
+      qrScanner.scan((result) => {
+        document.getElementById("nomor_aset").value = result;
+        cariAset();
+      });
+    }
+
+    // Dummy QR Scanner (gunakan library QR Code Scanner jika perlu)
+    class QRScanner {
+      scan(callback) {
+        const fakeResult = prompt("Simulasi QR Code Scan. Masukkan nomor aset:");
+        callback(fakeResult);
+      }
+    }
+  </script>
+</body>
+</html>
