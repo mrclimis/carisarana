@@ -64,7 +64,7 @@
         return;
       }
 
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbzFOwNICRrqv9_r937DQ593U0lfk9-djer4XvpngDw3qo248QBzVPD90ofT59mT7wmZ/exec?nomor_aset=${nomorAset}`);
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbzbpibACLFFtFd8CdqCCcVDEBG3JGWtqVVNhkTiBY_eNmDZshvB-CFu_CGOh9hNH6__/exec?nomor_aset=${nomorAset}`);
       const data = await response.json();
 
       const hasilDiv = document.getElementById("hasil");
@@ -114,7 +114,7 @@
           </p>
         `;
       } else {
-        hasilDiv.innerHTML = "<p>Data tidak ditemukan.</p>";
+        hasilDiv.innerHTML = "<p>Data tidak ditemukan!.</p>";
       }
     }
 
