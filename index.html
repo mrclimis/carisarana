@@ -40,48 +40,6 @@
       height: auto;
       margin-top: 20px;
     }
-
-    /* Gaya untuk overlay QR Code Scanner */
-    #qr-overlay {
-      display: none; /* Awalnya disembunyikan */
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7); /* Latar belakang semi-transparan */
-      justify-content: center;
-      align-items: center;
-      z-index: 1000; /* Pastikan overlay berada di atas halaman utama */
-    }
-
-    #qr-reader {
-      width: 100%;
-      max-width: 500px; /* Lebar maksimum scanner */
-      height: 400px; /* Tinggi scanner */
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      position: relative;
-    }
-
-    #qr-reader button {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 20px;
-      background-color: #ff4d4d;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 0 5px;
-    }
-
-    #qr-reader button:hover {
-      background-color: #ff1a1a;
-    }
   </style>
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
@@ -91,6 +49,7 @@
     <input type="text" id="nomor_aset" placeholder="Masukkan Nomor Aset">
     <button onclick="cariAset()">Cari Aset</button>
     <button onclick="scanQRCode()">Scan QR Code</button>
+    <button onclick="stopQRScanner()">Hentikan Pemindaian</button>
 
     <div id="hasil">
       <!-- Hasil pencarian akan ditampilkan di sini -->
@@ -159,49 +118,16 @@
       }
     }
 
-    let html5QrcodeScanner;
-
-    function closeScanner(overlay) {
-      if (html5QrcodeScanner) {
-        html5QrcodeScanner.clear(); // Hentikan pemindaian
-      }
-      overlay.remove(); // Hapus overlay
-    }
-
     function scanQRCode() {
-      // Buat elemen overlay
-      const overlay = document.createElement("div");
-      overlay.id = "qr-overlay";
-
       // Buat elemen untuk menampilkan pemindai QR Code
       const scannerDiv = document.createElement("div");
       scannerDiv.id = "qr-reader";
-
-      // Tombol "Tutup"
-      const closeButton = document.createElement("button");
-      closeButton.innerText = "Tutup";
-      closeButton.onclick = () => closeScanner(overlay);
-
-      // Tombol "Stop Scan"
-      const stopButton = document.createElement("button");
-      stopButton.innerText = "Stop Scan";
-      stopButton.onclick = () => closeScanner(overlay);
-
-      // Tambahkan tombol ke scanner
-      scannerDiv.appendChild(closeButton);
-      scannerDiv.appendChild(stopButton);
-
-      // Tambahkan scanner ke overlay
-      overlay.appendChild(scannerDiv);
-
-      // Tambahkan overlay ke body
-      document.body.appendChild(overlay);
-
-      // Tampilkan overlay
-      overlay.style.display = "flex";
+      scannerDiv.style.width = "100%";
+      scannerDiv.style.height = "300px"; // Tinggi pemindai
+      document.body.appendChild(scannerDiv);
 
       // Inisialisasi pemindai QR Code
-      html5QrcodeScanner = new Html5QrcodeScanner(
+      const html5QrcodeScanner = new Html5QrcodeScanner(
         "qr-reader", // ID elemen untuk pemindai
         { fps: 10, qrbox: 250 } // Konfigurasi: frame per detik dan ukuran kotak pemindaian
       );
@@ -211,15 +137,19 @@
         // Hentikan pemindaian setelah berhasil membaca QR Code
         html5QrcodeScanner.clear();
 
-        // Hapus overlay
-        overlay.remove();
-
         // Isi input nomor aset dengan hasil pemindaian
         document.getElementById("nomor_aset").value = decodedText;
 
         // Jalankan fungsi pencarian aset
         cariAset();
       });
+    }
+
+    function stopQRScanner() {
+      const scannerDiv = document.getElementById("qr-reader");
+      if (scannerDiv) {
+        scannerDiv.remove(); // Hapus elemen pemindai dari DOM
+      }
     }
   </script>
 </body>
