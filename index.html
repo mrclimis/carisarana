@@ -158,6 +158,8 @@
       }
     }
 
+    let html5QrcodeScanner;
+
     function scanQRCode() {
       // Buat elemen overlay
       const overlay = document.createElement("div");
@@ -171,7 +173,9 @@
       const cancelButton = document.createElement("button");
       cancelButton.innerText = "Hentikan Pemindaian";
       cancelButton.onclick = () => {
-        html5QrcodeScanner.clear(); // Hentikan pemindaian
+        if (html5QrcodeScanner) {
+          html5QrcodeScanner.clear(); // Hentikan pemindaian
+        }
         overlay.remove(); // Hapus overlay
       };
 
@@ -184,8 +188,11 @@
       // Tambahkan overlay ke body
       document.body.appendChild(overlay);
 
+      // Tampilkan overlay
+      overlay.style.display = "flex";
+
       // Inisialisasi pemindai QR Code
-      const html5QrcodeScanner = new Html5QrcodeScanner(
+      html5QrcodeScanner = new Html5QrcodeScanner(
         "qr-reader", // ID elemen untuk pemindai
         { fps: 10, qrbox: 250 } // Konfigurasi: frame per detik dan ukuran kotak pemindaian
       );
