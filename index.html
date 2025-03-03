@@ -10,8 +10,9 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
+      height: 100vh; /* Tinggi penuh viewport */
       display: flex;
+      flex-direction: column; /* Konten utama dan footer disusun secara vertikal */
       justify-content: center;
       align-items: center;
       background-color: #f0f0f0;
@@ -26,6 +27,7 @@
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex-grow: 1; /* Memastikan container mengisi ruang tersisa */
     }
 
     input, button {
@@ -45,6 +47,17 @@
     #stop-scan-button {
       display: none; /* Awalnya disembunyikan */
     }
+
+    /* Gaya untuk footer */
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      font-size: 14px;
+      width: 100%;
+      position: relative; /* Tetap di bagian bawah halaman */
+    }
   </style>
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
@@ -54,14 +67,28 @@
     <input type="text" id="nomor_aset" placeholder="Masukkan Nomor Aset">
     <button onclick="cariAset()">Cari Aset</button>
     <button onclick="scanQRCode()">Scan QR Code</button>
-    <button id="stop-scan-button" onclick="stopQRScanner()">Hentikan Pemindaian</button>
+    <button id="stop-scan-button" onclick="stopQRScanner()">Tutup Pemindaian</button>
 
     <div id="hasil">
       <!-- Hasil pencarian akan ditampilkan di sini -->
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer id="footer">
+    mrclimis &copy; <span id="current-year"></span> - swara sarpras 
+  </footer>
+
   <script>
+    // Fungsi untuk memperbarui tahun copyright
+    function updateCopyrightYear() {
+      const currentYear = new Date().getFullYear(); // Dapatkan tahun saat ini
+      document.getElementById("current-year").textContent = currentYear; // Perbarui teks tahun
+    }
+
+    // Panggil fungsi untuk memperbarui tahun saat halaman dimuat
+    updateCopyrightYear();
+
     async function cariAset() {
       const nomorAset = document.getElementById("nomor_aset").value;
       if (!nomorAset) {
