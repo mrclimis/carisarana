@@ -40,6 +40,11 @@
       height: auto;
       margin-top: 20px;
     }
+
+    /* Gaya untuk tombol Hentikan Pemindaian */
+    #stop-scan-button {
+      display: none; /* Awalnya disembunyikan */
+    }
   </style>
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
@@ -49,7 +54,7 @@
     <input type="text" id="nomor_aset" placeholder="Masukkan Nomor Aset">
     <button onclick="cariAset()">Cari Aset</button>
     <button onclick="scanQRCode()">Scan QR Code</button>
-    <button onclick="stopQRScanner()">Hentikan Pemindaian</button>
+    <button id="stop-scan-button" onclick="stopQRScanner()">Hentikan Pemindaian</button>
 
     <div id="hasil">
       <!-- Hasil pencarian akan ditampilkan di sini -->
@@ -118,7 +123,13 @@
       }
     }
 
+    let html5QrcodeScanner;
+
     function scanQRCode() {
+      // Tampilkan tombol Hentikan Pemindaian
+      const stopScanButton = document.getElementById("stop-scan-button");
+      stopScanButton.style.display = "block";
+
       // Buat elemen untuk menampilkan pemindai QR Code
       const scannerDiv = document.createElement("div");
       scannerDiv.id = "qr-reader";
@@ -127,7 +138,7 @@
       document.body.appendChild(scannerDiv);
 
       // Inisialisasi pemindai QR Code
-      const html5QrcodeScanner = new Html5QrcodeScanner(
+      html5QrcodeScanner = new Html5QrcodeScanner(
         "qr-reader", // ID elemen untuk pemindai
         { fps: 10, qrbox: 250 } // Konfigurasi: frame per detik dan ukuran kotak pemindaian
       );
@@ -136,6 +147,12 @@
       html5QrcodeScanner.render((decodedText) => {
         // Hentikan pemindaian setelah berhasil membaca QR Code
         html5QrcodeScanner.clear();
+
+        // Sembunyikan tombol Hentikan Pemindaian
+        stopScanButton.style.display = "none";
+
+        // Hapus elemen pemindai dari DOM
+        scannerDiv.remove();
 
         // Isi input nomor aset dengan hasil pemindaian
         document.getElementById("nomor_aset").value = decodedText;
@@ -146,9 +163,19 @@
     }
 
     function stopQRScanner() {
+      // Hentikan pemindaian
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.clear();
+      }
+
+      // Sembunyikan tombol Hentikan Pemindaian
+      const stopScanButton = document.getElementById("stop-scan-button");
+      stopScanButton.style.display = "none";
+
+      // Hapus elemen pemindai dari DOM
       const scannerDiv = document.getElementById("qr-reader");
       if (scannerDiv) {
-        scannerDiv.remove(); // Hapus elemen pemindai dari DOM
+        scannerDiv.remove();
       }
     }
   </script>
