@@ -222,7 +222,8 @@
     async function cariAset() {
       const nomorAset = document.getElementById("nomor_aset").value;
       if (!nomorAset) {
-        alert("Masukkan nomor aset!");
+        //alert("Masukkan nomor aset!");
+		customAlert("Masukkan nomor aset!");
         return;
       }
 
@@ -242,63 +243,67 @@
               <tr>
                 <th colspan="2" style="background: linear-gradient(to right, #0074D9, #00BFFF); color: white;">PROFIL SARANA</th>
               </tr>
+            <tr>
+                <td style="color: #f55b02;">Nomor Aset</td>
+                <td>${data.nomor_aset}</td>
+              <r>
+	 		  <!--
+			  <tr>
+                <td style="color: #f55b02;">Nomor SIMAS</td>
+                < td>${data.nomor_simas}</td>
+            </tr>
+			  -->
+			  <tr>
+                 <td style="color: #f55b02;">Jenis Sarana</td>
+              <td>${data.jenis_aset}</td>
+              </tr>
               <tr>
-                <td>Nomor Aset</td>
-                <td>: ${data.nomor_aset}</td>
+                 <td style="color: #f55b02;">Nama Sarana</td>
+              <td>${data.nama_aset}</td>
+              </tr>
+              <tr>
+                 <td style="color: #f55b02;">Sumber Anggar</td>
+                <td>${data.sumber_anggaran}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Tahun Aset</td>
+                <td>${data.tahun_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Lokasi</td>
+                <td>${data.lokasi_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Pengguna</td>
+                <td>${data.pengguna_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Penanggung Jawab</td>
+                <td>${data.penanggung_jawab}</td>
               </tr>
 			  <tr>
-                <td>Nomor SIMAS</td>
-                <td>: ${data.nomor_simas}</td>
+                <td style="color: #f55b02;">Jabatan</td>
+                <td>${data.jabatan}</td>
               </tr>
 			  <tr>
-                <td>Jenis Sarana</td>
-                <td>: ${data.jenis_aset}</td>
-              </tr>
-              <tr>
-                <td>Nama Sarana</td>
-                <td>: ${data.nama_aset}</td>
-              </tr>
-              <tr>
-                <td>Sumber Anggaran</td>
-                <td>: ${data.sumber_anggaran}</td>
-              </tr>
-              <tr>
-                <td>Tahun Aset</td>
-                <td>: ${data.tahun_aset}</td>
-              </tr>
-              <tr>
-                <td>Lokasi</td>
-                <td>: ${data.lokasi_aset}</td>
-              </tr>
-              <tr>
-                <td>Pengguna</td>
-                <td>: ${data.pengguna_aset}</td>
-              </tr>
-              <tr>
-                <td>Penanggung Jawab</td>
-                <td>: ${data.penanggung_jawab}</td>
+                <td style="color: #f55b02;">Keterangan</td>
+                <td>${data.keterangan}</td>
               </tr>
 			  <tr>
-                <td>Jabatan</td>
-                <td>: ${data.jabatan}</td>
-              </tr>
-			  <tr>
-                <td>Keterangan</td>
-                <td>: ${data.keterangan}</td>
-              </tr>
-			  <tr>
-                <td>Spesifikasi</td>
-                <td>: ${data.spesifikasi}</td>
+                <td style="color: #f55b02;">Spesifikasi</td>
+                <td>${data.spesifikasi}</td>
               </tr>
             </table>
             <p>Foto:</p>
             <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.foto_aset}" alt="Foto Aset">
           `;
         } else {
-          hasilDiv.innerHTML = '<p style="text-align:center; color:red; font-weight:bold;">Data tidak ditemukan!</p>';
+          //hasilDiv.innerHTML = '<p style="text-align:center; color:red; font-weight:bold;">Data tidak ditemukan!</p>';
+		  customAlert("Data tidak ditemukan!");
         }
       } catch (error) {
-        hasilDiv.innerHTML = "<p>Gagal memuat data. Silakan coba lagi.</p>";
+        //hasilDiv.innerHTML = "<p>Gagal memuat data. Silakan coba lagi.</p>";
+		customAlert("Gagal memuat data. Silakan coba lagi.");
       }
     }
 
@@ -375,6 +380,24 @@
       cariAsetButton.style.display = "block";
       scanQRButton.style.display = "block";
     }
+	
+	function customAlert(message) {
+		var modal = document.createElement("div");
+		modal.style.position = "fixed";
+		modal.style.top = "50%";
+		modal.style.left = "50%";
+		modal.style.transform = "translate(-50%, -50%)";
+		modal.style.padding = "20px";
+		modal.style.backgroundColor = "white";
+		modal.style.border = "1px solid black";
+		modal.style.zIndex = "1000";
+		modal.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+		modal.style.textAlign = "center";
+
+		modal.innerHTML = `<p>${message}</p><button onclick="document.body.removeChild(this.parentElement)">OK</button>`;
+		document.body.appendChild(modal);
+	}
+	
   </script>
 </body>
 </html>
