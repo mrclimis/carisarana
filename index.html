@@ -125,6 +125,8 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	  
+	  table-layout: fixed; /* Lebar kolom tetap */
     }
 
     table tr:nth-child(even) {
@@ -144,6 +146,9 @@
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid #ddd;
+	  
+	  word-wrap: break-word; /* Memindahkan teks ke baris baru jika tidak muat */
+      white-space: normal; /* Teks dapat dipindahkan ke baris baru */
     }
 
     table th {
@@ -152,7 +157,7 @@
       font-weight: bold;
       text-transform: uppercase; /* Teks kapital untuk tampilan profesional */
     }
-
+	
     table td:first-child {
       font-weight: bold;
     }
@@ -278,7 +283,11 @@
         hasilDiv.innerHTML = "";
 
         if (data.status === "found") {
-          hasilDiv.innerHTML = `
+			// URL foto di Google Drive (nama file sesuai nomor aset)
+			//const fotoUrl = 'https://drive.google.com/uc?id=${data.url_foto}';
+			const fotoUrl = `https://drive.google.com/thumbnail?id=${data.url_foto}`;
+			
+			hasilDiv.innerHTML = `
             <table>
               <tr>
                 <th colspan="2" style="background: linear-gradient(to right, #0074D9, #00BFFF); color: white;">PROFIL SARANA</th>
@@ -327,9 +336,14 @@
                 <td style="color: #f55b02;">Spesifikasi</td>
                 <td>${data.spesifikasi}</td>
               </tr>
+			  <tr>
+                <td style="color: #f55b02;">URL FOTO</td>
+                <td>${data.url_foto}</td>
+              </tr>
             </table>
-            <p>Foto:</p>
-            <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.foto_aset}" alt="Foto Aset">
+            <p style="text-align: center">Foto:<br>
+			<img src="${fotoUrl}" alt="Foto Aset" style="max-width: 100%;"><br>
+			</p>
           `;
         } else {
           customAlert("Peringatan", "Data tidak ditemukan!");
