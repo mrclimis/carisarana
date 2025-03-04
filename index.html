@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pencarian Aset</title>
   <style>
+    /* Gaya untuk body */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -13,14 +14,31 @@
       height: 100vh; /* Tinggi penuh viewport */
       display: flex;
       flex-direction: column; /* Konten utama dan footer disusun secara vertikal */
-      justify-content: center;
-      align-items: center;
+      justify-content: space-between; /* Mengatur ruang antara header, kontainer, dan footer */
       background-color: #f0f0f0;
     }
 
+    /* Gaya untuk header */
+    header {
+      max-width: 90%; /* Sama dengan lebar kontainer utama */
+      width: 100%; /* Gunakan persentase untuk responsivitas */
+      margin: auto; /* Rata tengah seperti kontainer utama */
+      background-color: #B2EBF2; /* Biru muda lembut */
+      color: #333; /* Warna teks gelap */
+      text-align: center; /* Teks rata tengah */
+      padding: 10px 0; /* Padding atas dan bawah */
+      border-radius: 8px 8px 0 0; /* Sudut melengkung di bagian atas */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan untuk efek modern */
+      height: 20px; /* Tinggi header sama dengan footer */
+      display: flex;
+      align-items: center; /* Pusatkan teks secara vertikal */
+      justify-content: center; /* Pusatkan teks secara horizontal */
+    }
+
+    /* Gaya untuk container utama */
     .container {
-      max-width: 100%; /* Ubah dari 500px ke 100% */
-      width: 90%; /* Gunakan persentase untuk responsivitas */
+      max-width: 90%; /* Sama dengan lebar header */
+      width: 100%; /* Gunakan persentase untuk responsivitas */
       margin: auto;
       padding: 20px;
       box-sizing: border-box;
@@ -28,42 +46,137 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       flex-grow: 1; /* Memastikan container mengisi ruang tersisa */
+      margin-top: 20px; /* Memberi jarak dari header */
+      margin-bottom: 20px; /* Memberi jarak dari footer */
     }
 
+    /* Gaya untuk input dan tombol */
     input, button {
       padding: 10px;
       margin: 10px 0;
       width: 100%;
       box-sizing: border-box;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 20px;
+    input {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #42f5ad; /* Warna hijau untuk tombol */
+      color: black; /* Warna teks hitam */
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2ecc71; /* Warna hijau lebih gelap saat hover */
     }
 
     /* Gaya untuk tombol Hentikan Pemindaian */
     #stop-scan-button {
       display: none; /* Awalnya disembunyikan */
+      background-color: #ff4d4d; /* Warna merah untuk tombol hentikan */
+      color: black; /* Warna teks hitam */
+    }
+
+    #stop-scan-button:hover {
+      background-color: #ff1a1a; /* Warna merah lebih gelap saat hover */
+    }
+
+    /* Gaya untuk gambar */
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     /* Gaya untuk footer */
     footer {
+      max-width: 90%; /* Sama dengan lebar header */
+      width: 100%; /* Gunakan persentase untuk responsivitas */
+      margin: auto; /* Rata tengah seperti header */
       text-align: center;
-      padding: 10px;
+      padding: 10px 0; /* Padding atas dan bawah */
       background-color: #333;
       color: white;
       font-size: 14px;
+      border-radius: 0 0 8px 8px; /* Sudut melengkung di bagian bawah */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 10px; /* Tinggi footer sama dengan header */
+      display: flex;
+      align-items: center; /* Pusatkan teks secara vertikal */
+      justify-content: center; /* Pusatkan teks secara horizontal */
+    }
+
+    /* Gaya untuk tabel */
+    table {
       width: 100%;
-      position: relative; /* Tetap di bagian bawah halaman */
+      border-collapse: collapse;
+      margin-top: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    table tr:hover {
+      background-color: #e0f7fa;
+      transition: background-color 0.3s ease;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+      background: linear-gradient(to right, #0074D9, #00BFFF); /* Gradien biru menarik */
+      color: white; /* Warna teks putih agar kontras */
+      font-weight: bold;
+      text-transform: uppercase; /* Teks kapital untuk tampilan profesional */
+    }
+
+    table td:first-child {
+      font-weight: bold;
+    }
+
+    /* Animasi loading */
+    .loading {
+      text-align: center;
+      font-size: 16px;
+      color: #555;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
   </style>
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
+  <!-- Header -->
+  <header>
+    <h3>CARI ASET SARANA</h3>
+  </header>
+
+  <!-- Container Utama -->
   <div class="container">
-    <center><h3>CARI ASET SARANA</h3></center>
     <input type="text" id="nomor_aset" placeholder="Masukkan Nomor Aset">
     <button onclick="cariAset()">Cari Aset</button>
     <button onclick="scanQRCode()">Scan QR Code</button>
@@ -76,7 +189,7 @@
 
   <!-- Footer -->
   <footer id="footer">
-    mrclimis &copy; <span id="current-year"></span> - swara sarpras 
+    mrclimis &copy; <span id="current-year"></span> &nbsp; - swara sarpras 
   </footer>
 
   <script>
@@ -96,21 +209,24 @@
         return;
       }
 
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbzbpibACLFFtFd8CdqCCcVDEBG3JGWtqVVNhkTiBY_eNmDZshvB-CFu_CGOh9hNH6__/exec?nomor_aset=${nomorAset}`);
-      const data = await response.json();
-
+      // Tampilkan animasi loading
       const hasilDiv = document.getElementById("hasil");
-      hasilDiv.innerHTML = "";
+      hasilDiv.innerHTML = `<p class="loading">Memuat data...</p>`;
 
-      if (data.status === "found") {
-        hasilDiv.innerHTML = `
-          <p>
-            <table width="100%" border="1">
-              <tr align="center">
-                <td colspan="2" bgcolor="#42f5ad">PROFIL SARANA</td>
+      try {
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbzbpibACLFFtFd8CdqCCcVDEBG3JGWtqVVNhkTiBY_eNmDZshvB-CFu_CGOh9hNH6__/exec?nomor_aset=${nomorAset}`);
+        const data = await response.json();
+
+        hasilDiv.innerHTML = "";
+
+        if (data.status === "found") {
+          hasilDiv.innerHTML = `
+            <table>
+              <tr>
+                <th colspan="2" style="background: linear-gradient(to right, #0074D9, #00BFFF); color: white;">PROFIL SARANA</th>
               </tr>
               <tr>
-                <td width="25%">Nomor Aset</td>
+                <td>Nomor Aset</td>
                 <td>: ${data.nomor_aset}</td>
               </tr>
               <tr>
@@ -134,19 +250,22 @@
                 <td>: ${data.pengguna_aset}</td>
               </tr>
               <tr>
-                <td colspan="2">Spesifikasi:<br> ............ </td>
+                <td>Spesifikasi</td>
+                <td>: ............</td>
               </tr>
             </table>
-          </p>
-          <p>
-            Foto:<br>
-            <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.foto_aset}" alt="Contoh Gambar">
-            <br>
-            ${data.foto_aset}
-          </p>
-        `;
-      } else {
-        hasilDiv.innerHTML = "<p>Data tidak ditemukan!.</p>";
+            <p>
+              Foto:<br>
+              <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.foto_aset}" alt="Contoh Gambar">
+              <br>
+              ${data.foto_aset}
+            </p>
+          `;
+        } else {
+          hasilDiv.innerHTML = "<p>Data tidak ditemukan!.</p>";
+        }
+      } catch (error) {
+        hasilDiv.innerHTML = "<p>Gagal memuat data. Silakan coba lagi.</p>";
       }
     }
 
