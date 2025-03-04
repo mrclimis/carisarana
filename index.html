@@ -125,8 +125,7 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	  
-	  table-layout: fixed; /* Lebar kolom tetap */
+      table-layout: fixed; /* Lebar kolom tetap */
     }
 
     table tr:nth-child(even) {
@@ -146,8 +145,7 @@
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid #ddd;
-	  
-	  word-wrap: break-word; /* Memindahkan teks ke baris baru jika tidak muat */
+      word-wrap: break-word; /* Memindahkan teks ke baris baru jika tidak muat */
       white-space: normal; /* Teks dapat dipindahkan ke baris baru */
     }
 
@@ -157,7 +155,7 @@
       font-weight: bold;
       text-transform: uppercase; /* Teks kapital untuk tampilan profesional */
     }
-	
+
     table td:first-child {
       font-weight: bold;
     }
@@ -283,11 +281,10 @@
         hasilDiv.innerHTML = "";
 
         if (data.status === "found") {
-			// URL foto di Google Drive (nama file sesuai nomor aset)
-			//const fotoUrl = 'https://drive.google.com/uc?id=${data.url_foto}';
-			const fotoUrl = `https://drive.google.com/thumbnail?id=${data.url_foto}`;
-			
-			hasilDiv.innerHTML = `
+          // URL foto di Google Drive (nama file sesuai nomor aset)
+          const fotoUrl = `https://drive.google.com/thumbnail?id=${data.url_foto}`;
+
+          hasilDiv.innerHTML = `
             <table>
               <tr>
                 <th colspan="2" style="background: linear-gradient(to right, #0074D9, #00BFFF); color: white;">PROFIL SARANA</th>
@@ -295,6 +292,10 @@
               <tr>
                 <td style="color: #f55b02;">Nomor Aset</td>
                 <td>${data.nomor_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Nomor SIMAS</td>
+                <td>${data.nomor_simas}</td>
               </tr>
               <tr>
                 <td style="color: #f55b02;">Jenis Sarana</td>
@@ -305,7 +306,7 @@
                 <td>${data.nama_aset}</td>
               </tr>
               <tr>
-                <td style="color: #f55b02;">Sumber Anggar</td>
+                <td style="color: #f55b02;">Sumber Anggaran</td>
                 <td>${data.sumber_anggaran}</td>
               </tr>
               <tr>
@@ -336,14 +337,10 @@
                 <td style="color: #f55b02;">Spesifikasi</td>
                 <td>${data.spesifikasi}</td>
               </tr>
-			  <tr>
-                <td style="color: #f55b02;">URL FOTO</td>
-                <td>${data.url_foto}</td>
-              </tr>
             </table>
             <p style="text-align: center">Foto:<br>
-			<img src="${fotoUrl}" alt="Foto Aset" style="max-width: 100%;"><br>
-			</p>
+            <img src="${fotoUrl}" alt="Foto Aset" style="max-width: 100%;"><br>
+            </p>
           `;
         } else {
           customAlert("Peringatan", "Data tidak ditemukan!");
@@ -356,12 +353,16 @@
     let html5QrcodeScanner;
 
     function scanQRCode() {
+      // Sembunyikan input nomor aset
+      const nomorAsetInput = document.getElementById("nomor_aset");
+      nomorAsetInput.style.display = "none";
+
       // Bersihkan tampilan hasil pencarian sebelumnya
       const hasilDiv = document.getElementById("hasil");
       hasilDiv.innerHTML = ""; // Kosongkan konten
 
       // Kosongkan nilai input nomor_aset
-      document.getElementById("nomor_aset").value = "";
+      nomorAsetInput.value = "";
 
       // Sembunyikan tombol Cari Aset dan Scan QR Code
       const cariAsetButton = document.getElementById("cari-aset-button");
@@ -398,8 +399,11 @@
         cariAsetButton.style.display = "block";
         scanQRButton.style.display = "block";
 
+        // Tampilkan kembali input nomor aset
+        nomorAsetInput.style.display = "block";
+
         // Isi input nomor aset dengan hasil pemindaian
-        document.getElementById("nomor_aset").value = decodedText;
+        nomorAsetInput.value = decodedText;
 
         // Jalankan fungsi pencarian aset
         cariAset();
@@ -425,6 +429,10 @@
       const scanQRButton = document.getElementById("scan-qr-button");
       cariAsetButton.style.display = "block";
       scanQRButton.style.display = "block";
+
+      // Tampilkan kembali input nomor aset
+      const nomorAsetInput = document.getElementById("nomor_aset");
+      nomorAsetInput.style.display = "block";
     }
 
     function customAlert(title, message) {
