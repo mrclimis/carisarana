@@ -14,7 +14,7 @@
       height: 100vh; /* Tinggi penuh viewport */
       display: flex;
       flex-direction: column; /* Konten utama dan footer disusun secara vertikal */
-      justify-content: space-between; /* Mengatur ruang antara header, kontainer, dan footer */
+      justify-content: space-between; /* Memberi ruang antara header, kontainer, dan footer */
       background-color: #f0f0f0;
     }
 
@@ -46,8 +46,10 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       flex-grow: 1; /* Memastikan container mengisi ruang tersisa */
+      overflow-y: auto; /* Tambahkan scrollbar jika konten melebihi tinggi */
       margin-top: 20px; /* Memberi jarak dari header */
       margin-bottom: 20px; /* Memberi jarak dari footer */
+      position: relative; /* Agar elemen pemindai QR Code bisa diposisikan dengan baik */
     }
 
     /* Gaya untuk input dan tombol */
@@ -92,8 +94,9 @@
       max-width: 100%;
       height: auto;
       margin-top: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 5px solid #B2EBF2; /* Frame biru muda */
+      border-radius: 10px; /* Sudut melengkung */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
     }
 
     /* Gaya untuk footer */
@@ -166,6 +169,16 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
+
+    /* Gaya untuk pemindai QR Code */
+    #qr-reader {
+      width: 100%;
+      height: 300px; /* Tinggi pemindai */
+      margin-top: 20px;
+      border: 2px solid #B2EBF2; /* Frame biru muda */
+      border-radius: 8px; /* Sudut melengkung */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+    }
   </style>
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
@@ -185,11 +198,14 @@
     <div id="hasil">
       <!-- Hasil pencarian akan ditampilkan di sini -->
     </div>
+
+    <!-- Elemen untuk pemindai QR Code -->
+    <div id="qr-reader" style="display: none;"></div>
   </div>
 
   <!-- Footer -->
   <footer id="footer">
-    mrclimis &copy; <span id="current-year"></span> &nbsp; - swara sarpras 
+    mrclimis &copy; <span id="current-year"></span> - swara sarpras 
   </footer>
 
   <script>
@@ -254,12 +270,8 @@
                 <td>: ............</td>
               </tr>
             </table>
-            <p>
-              Foto:<br>
-              <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.foto_aset}" alt="Contoh Gambar">
-              <br>
-              ${data.foto_aset}
-            </p>
+            <p>Foto:</p>
+            <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.foto_aset}" alt="Foto Aset">
           `;
         } else {
           hasilDiv.innerHTML = "<p>Data tidak ditemukan!.</p>";
@@ -272,16 +284,17 @@
     let html5QrcodeScanner;
 
     function scanQRCode() {
+      // Bersihkan tampilan hasil pencarian sebelumnya
+      const hasilDiv = document.getElementById("hasil");
+      hasilDiv.innerHTML = ""; // Kosongkan konten
+
       // Tampilkan tombol Hentikan Pemindaian
       const stopScanButton = document.getElementById("stop-scan-button");
       stopScanButton.style.display = "block";
 
-      // Buat elemen untuk menampilkan pemindai QR Code
-      const scannerDiv = document.createElement("div");
-      scannerDiv.id = "qr-reader";
-      scannerDiv.style.width = "100%";
-      scannerDiv.style.height = "300px"; // Tinggi pemindai
-      document.body.appendChild(scannerDiv);
+      // Tampilkan elemen pemindai QR Code
+      const qrReaderDiv = document.getElementById("qr-reader");
+      qrReaderDiv.style.display = "block";
 
       // Inisialisasi pemindai QR Code
       html5QrcodeScanner = new Html5QrcodeScanner(
@@ -297,8 +310,8 @@
         // Sembunyikan tombol Hentikan Pemindaian
         stopScanButton.style.display = "none";
 
-        // Hapus elemen pemindai dari DOM
-        scannerDiv.remove();
+        // Sembunyikan elemen pemindai QR Code
+        qrReaderDiv.style.display = "none";
 
         // Isi input nomor aset dengan hasil pemindaian
         document.getElementById("nomor_aset").value = decodedText;
@@ -318,11 +331,9 @@
       const stopScanButton = document.getElementById("stop-scan-button");
       stopScanButton.style.display = "none";
 
-      // Hapus elemen pemindai dari DOM
-      const scannerDiv = document.getElementById("qr-reader");
-      if (scannerDiv) {
-        scannerDiv.remove();
-      }
+      // Sembunyikan elemen pemindai QR Code
+      const qrReaderDiv = document.getElementById("qr-reader");
+      qrReaderDiv.style.display = "none";
     }
   </script>
 </body>
