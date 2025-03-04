@@ -231,7 +231,7 @@
       hasilDiv.innerHTML = `<p class="loading">Memuat data...</p>`;
 
       try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbzbpibACLFFtFd8CdqCCcVDEBG3JGWtqVVNhkTiBY_eNmDZshvB-CFu_CGOh9hNH6__/exec?nomor_aset=${nomorAset}`);
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbzixPm550RNt-VqAsVdjCJNx3DRtqSWdbX6eNpUkbfd8bAJtlHbhjUrXhCQcdSZZX77/exec?nomor_aset=${nomorAset}`);
         const data = await response.json();
 
         hasilDiv.innerHTML = "";
@@ -243,8 +243,16 @@
                 <th colspan="2" style="background: linear-gradient(to right, #0074D9, #00BFFF); color: white;">PROFIL SARANA</th>
               </tr>
               <tr>
-                <td>Nomor Aset</td>
+                <td width="15%">Nomor Aset</td>
                 <td>: ${data.nomor_aset}</td>
+              </tr>
+			  <tr>
+                <td>Nomor SIMAS</td>
+                <td>: ${data.nomor_simas}</td>
+              </tr>
+			  <tr>
+                <td>Kelompok Jenis</td>
+                <td>: ${data.jenis_aset}</td>
               </tr>
               <tr>
                 <td>Nama Sarana</td>
@@ -252,27 +260,39 @@
               </tr>
               <tr>
                 <td>Anggaran</td>
-                <td>: .......</td>
+                <td>: ${data.sumber_anggaran}</td>
               </tr>
               <tr>
                 <td>Tahun</td>
-                <td>: ........</td>
+                <td>: ${data.tahun_aset}</td>
               </tr>
               <tr>
                 <td>Lokasi</td>
-                <td>: ${data.ruang_aset}</td>
+                <td>: ${data.lokasi_aset}</td>
               </tr>
               <tr>
                 <td>Pengguna</td>
                 <td>: ${data.pengguna_aset}</td>
               </tr>
+			  <tr>
+                <td>Penanggung Jawab</td>
+                <td>: ${data.penanggung_jawab}</td>
+              </tr>
+			  <tr>
+                <td>Jabatan</td>
+                <td>: ${data.jabatan}</td>
+              </tr>
+			  <tr>
+                <td>Keterangan</td>
+                <td>: ${data.keterangan}</td>
+              </tr>
               <tr>
                 <td>Spesifikasi</td>
-                <td>: ............</td>
+                <td>: ${data.spesifikasi}</td>
               </tr>
             </table>
             <p>Foto:</p>
-            <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.foto_aset}" alt="Foto Aset">
+            <img src="https://proxy.cors.sh/https://drive.google.com/uc?id=${data.url_foto}" alt="Foto Aset">
           `;
         } else {
           hasilDiv.innerHTML = "<p>Data tidak ditemukan!.</p>";
