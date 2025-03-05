@@ -282,7 +282,9 @@
 
         if (data.status === "found") {
           // URL foto di Google Drive (nama file sesuai nomor aset)
-          const fotoUrl = `https://drive.google.com/thumbnail?id=${data.url_foto}`;
+          const fotoUrl = data.url_foto
+            ? `https://drive.google.com/thumbnail?id=${data.url_foto}`
+            : "https://drive.google.com/thumbnail?id=1sMu1l3EYCxC15eus0y6o0ykN8BHcDkTz"; // Foto default jika tidak ada foto
 
           hasilDiv.innerHTML = `
             <table>
