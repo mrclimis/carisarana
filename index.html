@@ -275,7 +275,7 @@
       hasilDiv.innerHTML = `<p class="loading">Memuat data...</p>`;
 
       try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbzYWwEIvtRSCOuf1AvxhFZMevekNynOO_XmIKTdOiV6jO-ckC754wjl81kfNzAcSIyN/exec?nomor_aset=${nomorAset}`);
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbxwdD4G580j3Ht6C8-rtVSNkhab2A2d0zXC2lyt7pTRcPr08tS1YdFOATzXipDBmmiN/exec?nomor_aset=${nomorAset}`);
         const data = await response.json();
 
         hasilDiv.innerHTML = "";
@@ -311,8 +311,12 @@
                 <td style="color: #f55b02;">Sumber Anggaran</td>
                 <td>${data.sumber_anggaran}</td>
               </tr>
+			  <tr>
+                <td style="color: #f55b02;">Bulan Pengadaan</td>
+                <td>${data.bulan_aset}</td>
+              </tr>
               <tr>
-                <td style="color: #f55b02;">Tahun Aset</td>
+                <td style="color: #f55b02;">Tahun Pengadaan</td>
                 <td>${data.tahun_aset}</td>
               </tr>
               <tr>
@@ -334,6 +338,18 @@
               <tr>
                 <td style="color: #f55b02;">Keterangan</td>
                 <td>${data.keterangan}</td>
+              </tr>
+			  <tr>
+                <td style="color: #f55b02;">Jumlah</td>
+                <td>${data.jumlah_aset}</td>
+              </tr>
+			  <tr>
+                <td style="color: #f55b02;">Kondisi Aset</td>
+                <td>${data.kondisi_aset}</td>
+              </tr>
+			  <tr>
+                <td style="color: #f55b02;">Status Aset</td>
+                <td>${data.status_aset}</td>
               </tr>
               <tr>
                 <td style="color: #f55b02;">Spesifikasi</td>
