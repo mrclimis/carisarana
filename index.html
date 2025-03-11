@@ -1,1 +1,474 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pencarian Aset</title><style>body{font-family:Arial,sans-serif;margin:0;padding:0;width:100%;height:100vh;display:flex;flex-direction:column;justify-content:space-between;background-color:#f0f0f0}header{max-width:90%;width:100%;margin:auto;background-color:#B2EBF2;color:#333;text-align:center;padding:10px 0;border-radius:8px 8px 0 0;box-shadow:0 4px 8px rgba(0,0,0,0.1);height:20px;display:flex;align-items:center;justify-content:center}.container{max-width:90%;width:100%;margin:auto;padding:20px;box-sizing:border-box;background-color:#fff;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.1);flex-grow:1;overflow-y:auto;margin-top:20px;margin-bottom:20px;position:relative}input,button{padding:10px;margin:10px 0;width:100%;box-sizing:border-box;border:none;border-radius:4px;cursor:pointer}input{background-color:#f9f9f9;border:1px solid #ccc}button{background-color:#42f5ad;color:#000;transition:background-color 0.3s ease}button:hover{background-color:#2ecc71}#stop-scan-button{display:none;background-color:#ff4d4d;color:#000}#stop-scan-button:hover{background-color:#ff1a1a}img{max-width:100%;height:auto;margin-top:20px;border:5px solid #B2EBF2;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1)}footer{max-width:90%;width:100%;margin:auto;text-align:center;padding:10px 0;background-color:#333;color:#fff;font-size:14px;border-radius:0 0 8px 8px;box-shadow:0 4px 8px rgba(0,0,0,0.1);height:10px;display:flex;align-items:center;justify-content:center}table{width:100%;border-collapse:collapse;margin-top:20px;border-radius:8px;overflow:hidden;box-shadow:0 4px 8px rgba(0,0,0,0.1);table-layout:fixed}table tr:nth-child(even){background-color:#f9f9f9}table tr:nth-child(odd){background-color:#fff}table tr:hover{background-color:#e0f7fa;transition:background-color 0.3s ease}table th,table td{padding:12px;text-align:left;border-bottom:1px solid #ddd;word-wrap:break-word;white-space:normal}table th{background:linear-gradient(to right,#0074D9,#00BFFF);color:#fff;font-weight:bold;text-transform:uppercase}table td:first-child{font-weight:bold}.loading{text-align:center;font-size:16px;color:#555;animation:blink 1s infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}#qr-reader{width:100%;height:300px;margin-top:20px;border:2px solid #B2EBF2;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.1)}.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:1000}.modal{background-color:#fff;padding:20px;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.2);text-align:center}.modal-header{font-size:18px;font-weight:bold;margin-bottom:10px}.modal button{margin-top:10px;padding:10px 20px;background-color:#42f5ad;border:none;border-radius:4px;cursor:pointer}.modal button:hover{background-color:#2ecc71}</style><script src="https://unpkg.com/html5-qrcode"></script></head><body><header><h4>CARI PROFIL ASET SARANA</h4></header><div class="container"><center>Versi Uji Coba</center><input type="text" id="nomor_aset" placeholder="Masukkan Nomor Aset"><button id="cari-aset-button" onclick="c()">Cari Aset</button><button id="scan-qr-button" onclick="s()">Scan QR Code</button><button id="stop-scan-button" onclick="t()">Tutup Pemindaian</button><div id="hasil"></div><div id="qr-reader" style="display:none"></div></div><footer id="footer">&copy; <span id="current-year"></span>&nbsp;mrclimis&nbsp; <a href="https://www.nirayu.id/" target="_blank">nirayu.id</a>. All Rights Reserved.</footer><script>function u(){const e=new Date().getFullYear();document.getElementById("current-year").textContent=e}u();async function c(){const e=document.getElementById("nomor_aset").value;if(!e){v("Peringatan","Masukkan nomor aset!");return}const t=document.getElementById("hasil");t.innerHTML='<p class="loading">Memuat data...</p>';try{const n=await fetch(`https://script.google.com/macros/s/AKfycbw6umXE8H4O_hOVAhyV9422d1taUF5mHyHlFlgGsX3-RNFvQhfAEFmGnfauVpgeshnD/exec?nomor_aset=${e}`),a=await n.json();t.innerHTML="";if(a.status==="found"){const o=a.url_foto?`https://drive.google.com/thumbnail?id=${a.url_foto}`:"https://drive.google.com/thumbnail?id=1sMu1l3EYCxC15eus0y6o0ykN8BHcDkTz";t.innerHTML=`<table><tr><th colspan="2" style="background:linear-gradient(to right,#0074D9,#00BFFF);color:#fff">PROFIL SARANA</th></tr><tr><td style="color:#f55b02">Nomor Aset</td><td>${a.nomor_aset}</td></tr><tr><td style="color:#f55b02">Nomor SIMAS</td><td>${a.nomor_simas}</td></tr><tr><td style="color:#f55b02">Jenis Sarana</td><td>${a.jenis_aset}</td></tr><tr><td style="color:#f55b02">Nama Sarana</td><td>${a.nama_aset}</td></tr><tr><td style="color:#f55b02">Sumber Anggaran</td><td>${a.sumber_anggaran}</td></tr><tr><td style="color:#f55b02">Bulan Pengadaan</td><td>${a.bulan_aset}</td></tr><tr><td style="color:#f55b02">Tahun Pengadaan</td><td>${a.tahun_aset}</td></tr><tr><td style="color:#f55b02">Lokasi</td><td>${a.lokasi_aset}</td></tr><tr><td style="color:#f55b02">Pengguna</td><td>${a.pengguna_aset}</td></tr><tr><td style="color:#f55b02">Penanggung Jawab</td><td>${a.penanggung_jawab}</td></tr><tr><td style="color:#f55b02">Jabatan</td><td>${a.jabatan}</td></tr><tr><td style="color:#f55b02">Keterangan</td><td>${a.keterangan}</td></tr><tr><td style="color:#f55b02">Jumlah</td><td>${a.jumlah_aset}</td></tr><tr><td style="color:#f55b02">Kondisi Aset</td><td>${a.kondisi_aset}</td></tr><tr><td style="color:#f55b02">Status Aset</td><td>${a.status_aset}</td></tr><tr><td style="color:#f55b02">Spesifikasi</td><td>${a.spesifikasi}</td></tr></table><p style="text-align:center">Foto:<br><img src="${o}" alt="Foto Aset" style="max-width:100%"><br></p>`}else{v("Peringatan","Data tidak ditemukan!")}}catch(r){v("Peringatan","Gagal memuat data. Silakan coba lagi.")}}let d;function s(){const e=document.getElementById("nomor_aset");e.style.display="none";const t=document.getElementById("hasil");t.innerHTML="";e.value="";const n=document.getElementById("cari-aset-button"),a=document.getElementById("scan-qr-button");n.style.display="none";a.style.display="none";const o=document.getElementById("stop-scan-button");o.style.display="block";const r=document.getElementById("qr-reader");r.style.display="block";d=new Html5QrcodeScanner("qr-reader",{fps:10,qrbox:250});d.render(c=>{d.clear();o.style.display="none";r.style.display="none";n.style.display="block";a.style.display="block";e.style.display="block";e.value=c;c()})}function t(){if(d){d.clear()}const e=document.getElementById("stop-scan-button");e.style.display="none";const n=document.getElementById("qr-reader");n.style.display="none";const a=document.getElementById("cari-aset-button"),o=document.getElementById("scan-qr-button");a.style.display="block";o.style.display="block";const r=document.getElementById("nomor_aset");r.style.display="block"}function v(e,t){const n=document.createElement("div");n.className="modal-overlay";const a=document.createElement("div");a.className="modal";a.innerHTML=`<div class="modal-header">${e}</div><p>${t}</p><button onclick="document.body.removeChild(this.parentElement.parentElement)">OK</button>`;n.appendChild(a);document.body.appendChild(n)}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencarian Aset</title>
+  <style>
+    /* Gaya untuk body */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100vh; /* Tinggi penuh viewport */
+      display: flex;
+      flex-direction: column; /* Konten utama dan footer disusun secara vertikal */
+      justify-content: space-between; /* Memberi ruang antara header, kontainer, dan footer */
+      background-color: #f0f0f0;
+    }
+
+    /* Gaya untuk header */
+    header {
+      max-width: 90%; /* Sama dengan lebar kontainer utama */
+      width: 100%; /* Gunakan persentase untuk responsivitas */
+      margin: auto; /* Rata tengah seperti kontainer utama */
+      background-color: #B2EBF2; /* Biru muda lembut */
+      color: #333; /* Warna teks gelap */
+      text-align: center; /* Teks rata tengah */
+      padding: 10px 0; /* Padding atas dan bawah */
+      border-radius: 8px 8px 0 0; /* Sudut melengkung di bagian atas */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan untuk efek modern */
+      height: 20px; /* Tinggi header sama dengan footer */
+      display: flex;
+      align-items: center; /* Pusatkan teks secara vertikal */
+      justify-content: center; /* Pusatkan teks secara horizontal */
+    }
+
+    /* Gaya untuk container utama */
+    .container {
+      max-width: 90%; /* Sama dengan lebar header */
+      width: 100%; /* Gunakan persentase untuk responsivitas */
+      margin: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex-grow: 1; /* Memastikan container mengisi ruang tersisa */
+      overflow-y: auto; /* Tambahkan scrollbar jika konten melebihi tinggi */
+      margin-top: 20px; /* Memberi jarak dari header */
+      margin-bottom: 20px; /* Memberi jarak dari footer */
+      position: relative; /* Agar elemen pemindai QR Code bisa diposisikan dengan baik */
+    }
+
+    /* Gaya untuk input dan tombol */
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #42f5ad; /* Warna hijau untuk tombol */
+      color: black; /* Warna teks hitam */
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2ecc71; /* Warna hijau lebih gelap saat hover */
+    }
+
+    /* Gaya untuk tombol Hentikan Pemindaian */
+    #stop-scan-button {
+      display: none; /* Awalnya disembunyikan */
+      background-color: #ff4d4d; /* Warna merah untuk tombol hentikan */
+      color: black; /* Warna teks hitam */
+    }
+
+    #stop-scan-button:hover {
+      background-color: #ff1a1a; /* Warna merah lebih gelap saat hover */
+    }
+
+    /* Gaya untuk gambar */
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+      border: 5px solid #B2EBF2; /* Frame biru muda */
+      border-radius: 10px; /* Sudut melengkung */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+    }
+
+    /* Gaya untuk footer */
+    footer {
+      max-width: 90%; /* Sama dengan lebar header */
+      width: 100%; /* Gunakan persentase untuk responsivitas */
+      margin: auto; /* Rata tengah seperti header */
+      text-align: center;
+      padding: 10px 0; /* Padding atas dan bawah */
+      background-color: #333;
+      color: white;
+      font-size: 14px;
+      border-radius: 0 0 8px 8px; /* Sudut melengkung di bagian bawah */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 10px; /* Tinggi footer sama dengan header */
+      display: flex;
+      align-items: center; /* Pusatkan teks secara vertikal */
+      justify-content: center; /* Pusatkan teks secara horizontal */
+    }
+
+    /* Gaya untuk tabel */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      table-layout: fixed; /* Lebar kolom tetap */
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    table tr:hover {
+      background-color: #e0f7fa;
+      transition: background-color 0.3s ease;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      word-wrap: break-word; /* Memindahkan teks ke baris baru jika tidak muat */
+      white-space: normal; /* Teks dapat dipindahkan ke baris baru */
+    }
+
+    table th {
+      background: linear-gradient(to right, #0074D9, #00BFFF); /* Gradien biru menarik */
+      color: white; /* Warna teks putih agar kontras */
+      font-weight: bold;
+      text-transform: uppercase; /* Teks kapital untuk tampilan profesional */
+    }
+
+    table td:first-child {
+      font-weight: bold;
+    }
+
+    /* Animasi loading */
+    .loading {
+      text-align: center;
+      font-size: 16px;
+      color: #555;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Gaya untuk pemindai QR Code */
+    #qr-reader {
+      width: 100%;
+      height: 300px; /* Tinggi pemindai */
+      margin-top: 20px;
+      border: 2px solid #B2EBF2; /* Frame biru muda */
+      border-radius: 8px; /* Sudut melengkung */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+    }
+
+    /* Gaya untuk modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .modal-header {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .modal button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #42f5ad;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .modal button:hover {
+      background-color: #2ecc71;
+    }
+  </style>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h4>CARI PROFIL ASET SARANA</h4>
+  </header>
+
+  <!-- Container Utama -->
+  <div class="container">
+    <center>Versi Uji Coba</center>
+    <input type="text" id="nomor_aset" placeholder="Masukkan Nomor Aset">
+    <button id="cari-aset-button" onclick="cariAset()">Cari Aset</button>
+    <button id="scan-qr-button" onclick="scanQRCode()">Scan QR Code</button>
+    <button id="stop-scan-button" onclick="stopQRScanner()">Tutup Pemindaian</button>
+
+    <div id="hasil">
+      <!-- Hasil pencarian akan ditampilkan di sini -->
+    </div>
+
+    <!-- Elemen untuk pemindai QR Code -->
+    <div id="qr-reader" style="display: none;"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    V.1.03.25&nbsp;&copy; &nbsp;<span id="current-year"></span> &nbsp; mrclimis &nbsp; <a href="https://www.nirayu.id/"  target="_blank">nirayu.id</a>. All Rights Reserved.
+  </footer>
+
+  <script>
+    // Fungsi untuk memperbarui tahun copyright
+    function updateCopyrightYear() {
+      const currentYear = new Date().getFullYear(); // Dapatkan tahun saat ini
+      document.getElementById("current-year").textContent = currentYear; // Perbarui teks tahun
+    }
+
+    // Panggil fungsi untuk memperbarui tahun saat halaman dimuat
+    updateCopyrightYear();
+
+    async function cariAset() {
+      const nomorAset = document.getElementById("nomor_aset").value;
+      if (!nomorAset) {
+        customAlert("Peringatan", "Masukkan nomor aset!");
+        return;
+      }
+
+      // Tampilkan animasi loading
+      const hasilDiv = document.getElementById("hasil");
+      hasilDiv.innerHTML = `<p class="loading">Memuat data...</p>`;
+
+      try {
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbw6umXE8H4O_hOVAhyV9422d1taUF5mHyHlFlgGsX3-RNFvQhfAEFmGnfauVpgeshnD/exec?nomor_aset=${nomorAset}`);
+        const data = await response.json();
+
+        hasilDiv.innerHTML = "";
+
+        if (data.status === "found") {
+          // URL foto di Google Drive (nama file sesuai nomor aset)
+          const fotoUrl = data.url_foto
+            ? `https://drive.google.com/thumbnail?id=${data.url_foto}`
+            : "https://drive.google.com/thumbnail?id=1sMu1l3EYCxC15eus0y6o0ykN8BHcDkTz"; // Foto default jika tidak ada foto
+
+          hasilDiv.innerHTML = `
+            <table>
+              <tr>
+                <th colspan="2" style="background: linear-gradient(to right, #0074D9, #00BFFF); color: white;">PROFIL SARANA</th>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Nomor Aset</td>
+                <td>${data.nomor_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Nomor SIMAS</td>
+                <td>${data.nomor_simas}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Jenis Sarana</td>
+                <td>${data.jenis_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Nama Sarana</td>
+                <td>${data.nama_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Sumber Anggaran</td>
+                <td>${data.sumber_anggaran}</td>
+              </tr>
+			  <tr>
+                <td style="color: #f55b02;">Bulan Pengadaan</td>
+                <td>${data.bulan_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Tahun Pengadaan</td>
+                <td>${data.tahun_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Lokasi</td>
+                <td>${data.lokasi_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Pengguna</td>
+                <td>${data.pengguna_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Penanggung Jawab</td>
+                <td>${data.penanggung_jawab}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Jabatan</td>
+                <td>${data.jabatan}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Keterangan</td>
+                <td>${data.keterangan}</td>
+              </tr>
+			  <tr>
+                <td style="color: #f55b02;">Jumlah</td>
+                <td>${data.jumlah_aset}</td>
+              </tr>
+			  <tr>
+                <td style="color: #f55b02;">Kondisi Aset</td>
+                <td>${data.kondisi_aset}</td>
+              </tr>
+			  <tr>
+                <td style="color: #f55b02;">Status Aset</td>
+                <td>${data.status_aset}</td>
+              </tr>
+              <tr>
+                <td style="color: #f55b02;">Spesifikasi</td>
+                <td>${data.spesifikasi}</td>
+              </tr>
+            </table>
+            <p style="text-align: center">Foto:<br>
+            <img src="${fotoUrl}" alt="Foto Aset" style="max-width: 100%;"><br>
+            </p>
+          `;
+        } else {
+          customAlert("Peringatan", "Data tidak ditemukan!");
+        }
+      } catch (error) {
+        customAlert("Peringatan", "Gagal memuat data. Silakan coba lagi.");
+      }
+    }
+
+    let html5QrcodeScanner;
+
+    function scanQRCode() {
+      // Sembunyikan input nomor aset
+      const nomorAsetInput = document.getElementById("nomor_aset");
+      nomorAsetInput.style.display = "none";
+
+      // Bersihkan tampilan hasil pencarian sebelumnya
+      const hasilDiv = document.getElementById("hasil");
+      hasilDiv.innerHTML = ""; // Kosongkan konten
+
+      // Kosongkan nilai input nomor_aset
+      nomorAsetInput.value = "";
+
+      // Sembunyikan tombol Cari Aset dan Scan QR Code
+      const cariAsetButton = document.getElementById("cari-aset-button");
+      const scanQRButton = document.getElementById("scan-qr-button");
+      cariAsetButton.style.display = "none";
+      scanQRButton.style.display = "none";
+
+      // Tampilkan tombol Hentikan Pemindaian
+      const stopScanButton = document.getElementById("stop-scan-button");
+      stopScanButton.style.display = "block";
+
+      // Tampilkan elemen pemindai QR Code
+      const qrReaderDiv = document.getElementById("qr-reader");
+      qrReaderDiv.style.display = "block";
+
+      // Inisialisasi pemindai QR Code
+      html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader", // ID elemen untuk pemindai
+        { fps: 10, qrbox: 250 } // Konfigurasi: frame per detik dan ukuran kotak pemindaian
+      );
+
+      // Mulai pemindaian
+      html5QrcodeScanner.render((decodedText) => {
+        // Hentikan pemindaian setelah berhasil membaca QR Code
+        html5QrcodeScanner.clear();
+
+        // Sembunyikan tombol Hentikan Pemindaian
+        stopScanButton.style.display = "none";
+
+        // Sembunyikan elemen pemindai QR Code
+        qrReaderDiv.style.display = "none";
+
+        // Munculkan kembali tombol Cari Aset dan Scan QR Code
+        cariAsetButton.style.display = "block";
+        scanQRButton.style.display = "block";
+
+        // Tampilkan kembali input nomor aset
+        nomorAsetInput.style.display = "block";
+
+        // Isi input nomor aset dengan hasil pemindaian
+        nomorAsetInput.value = decodedText;
+
+        // Jalankan fungsi pencarian aset
+        cariAset();
+      });
+    }
+
+    function stopQRScanner() {
+      // Hentikan pemindaian
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.clear();
+      }
+
+      // Sembunyikan tombol Hentikan Pemindaian
+      const stopScanButton = document.getElementById("stop-scan-button");
+      stopScanButton.style.display = "none";
+
+      // Sembunyikan elemen pemindai QR Code
+      const qrReaderDiv = document.getElementById("qr-reader");
+      qrReaderDiv.style.display = "none";
+
+      // Munculkan kembali tombol Cari Aset dan Scan QR Code
+      const cariAsetButton = document.getElementById("cari-aset-button");
+      const scanQRButton = document.getElementById("scan-qr-button");
+      cariAsetButton.style.display = "block";
+      scanQRButton.style.display = "block";
+
+      // Tampilkan kembali input nomor aset
+      const nomorAsetInput = document.getElementById("nomor_aset");
+      nomorAsetInput.style.display = "block";
+    }
+
+    function customAlert(title, message) {
+      const modalOverlay = document.createElement("div");
+      modalOverlay.className = "modal-overlay";
+
+      const modal = document.createElement("div");
+      modal.className = "modal";
+
+      modal.innerHTML = `
+        <div class="modal-header">${title}</div>
+        <p>${message}</p>
+        <button onclick="document.body.removeChild(this.parentElement.parentElement)">OK</button>
+      `;
+
+      modalOverlay.appendChild(modal);
+      document.body.appendChild(modalOverlay);
+    }
+  </script>
+</body>
+</html>
